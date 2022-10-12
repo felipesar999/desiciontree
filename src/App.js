@@ -10,13 +10,11 @@ export default function Home() {
     var house = document.getElementById("House").value;
     var credit = document.getElementById("Credit").value;
 
-    //var age1 = document.getElementById("Age1").value;
+    if (age === "" || job === "" || house === "" || credit === "") {
+      console.log("Los datos no estan llenos correctamente");
+      flag = true
+    }
 
-    //console.log(age1);
-
-    //const csvFile = document.getElementById("csvFile");
-
-    // let files = document.getElementById("csvFile").files;
     const file = document.getElementById("csvFile").files[0];
 
     var fileData = await leerArchivo(file);
@@ -34,24 +32,37 @@ export default function Home() {
       dataOrder.push(datos);
     }
 
-    for (const key of dataOrder) {
-      if (
-        age === key.age &&
-        job === key.job &&
-        house === key.house &&
-        credit === key.credit
-      ) {
-        console.log(
-          "El historico dice que debes " + key.loanApproved + " aprobar"
-        );
-        flag = true;
+    if (!flag) {
+      for (const key of dataOrder) {
+        if (
+          age === key.age &&
+          job === key.job &&
+          house === key.house &&
+          credit === key.credit
+        ) {
+          console.log(
+            "El historico dice que debes " + key.loanApproved + " aprobar"
+          );
+          flag = true;
+        }
+        if (flag) break;
       }
-      if (flag) break;
     }
 
-    if (!flag) var orderDatas = await orderData(dataOrder);
+    if (!flag) {
+      var orderDatas = await orderData(dataOrder);
+      console.log(orderDatas);
+    }
 
-    console.log(orderDatas);
+    if (house === orderDatas.ppalRoleNombre) {
+      var h1 = document.createElement("h1");
+      h1.innerHTML = ("Loan Approved YES");
+      console.log("Loan Approved YES")
+    }
+
+
+
+
   }
   /*document.getElementById("btn1").onclick = () => {
       data();
@@ -74,6 +85,16 @@ export default function Home() {
   }
 
   async function orderData(data) {
+
+    /**
+     * Conseguir las cabeceras para iniciar de forma interactiva
+     */
+    let header = []
+
+    for (let i = 0; i < 1; i++) {
+      console.log(data[i])
+    }
+
     var dataAge = [0, 0, 0];
     var dataErrorAge = [0, 0, 0];
     var dataSucessAge = [0, 0, 0];
@@ -327,7 +348,7 @@ export default function Home() {
         }
       }
     }
-    return({ ppalAtributo, ppalAtributoNombre, ppalRole, ppalRoleNombre });
+    return ({ ppalAtributo, ppalAtributoNombre, ppalRole, ppalRoleNombre });
   }
 
   return (
