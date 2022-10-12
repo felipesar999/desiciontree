@@ -51,7 +51,7 @@ export default function Home() {
 
     if (!flag) var orderDatas = await orderData(dataOrder);
 
-    // console.log(orderDatas)
+    console.log(orderDatas);
   }
   /*document.getElementById("btn1").onclick = () => {
       data();
@@ -214,7 +214,7 @@ export default function Home() {
     }
 
     /**
-     * Organizacion de todos los datos en un Json, ya no entendia como estaban organizados, 
+     * Organizacion de todos los datos en un Json, ya no entendia como estaban organizados,
      * ciclos separados para entender el proceso
      */
 
@@ -279,31 +279,61 @@ export default function Home() {
 
     console.log(dataOrden);
 
-
     /**
      * Errores por Atributo
      */
 
-    var globalError = [0,0,0,0]
+    let globalError = [0, 0, 0, 0];
+
     for (const key of dataOrden) {
-      
-      if (key.padre === "Age") globalError[0] += key.errores/key.cantidad
-      else if (key.padre === "Job") globalError[1] += key.errores/key.cantidad
-      else if (key.padre === "House") globalError[2] += key.errores/key.cantidad
-      else globalError[3] += key.errores/key.cantidad
-      console.log(key,globalError);
+      if (key.padre === "Age") globalError[0] += key.errores / key.cantidad;
+      else if (key.padre === "Job")
+        globalError[1] += key.errores / key.cantidad;
+      else if (key.padre === "House")
+        globalError[2] += key.errores / key.cantidad;
+      else globalError[3] += key.errores / key.cantidad;
     }
 
-    console.log(globalError);
-
-
-
+    let ppalAtributo = 100;
+    let ppalAtributoNombre;
+    for (let i = 0; i < globalError.length; i++) {
+      if (globalError[i] < ppalAtributo) {
+        ppalAtributo = globalError[i];
+        switch (i) {
+          case 0:
+            ppalAtributoNombre = "Age";
+            break;
+          case 1:
+            ppalAtributoNombre = "Job";
+            break;
+          case 2:
+            ppalAtributoNombre = "House";
+            break;
+          case 3:
+            ppalAtributoNombre = "Credit";
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    let ppalRole = 100;
+    let ppalRoleNombre;
+    for (const key of dataOrden) {
+      if (key.padre === ppalAtributoNombre) {
+        if (key.errores / key.cantidad < ppalRole) {
+          ppalRole = key.errores / key.cantidad;
+          ppalRoleNombre = key.atributo;
+        }
+      }
+    }
+    return({ ppalAtributo, ppalAtributoNombre, ppalRole, ppalRoleNombre });
   }
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="Logo" />
+        <img src={logo} alt="Logo" className="Logo" />
         <h3>Arbol de desiciones</h3>
         <ul>
           <li>Digite los datos aqui</li>
