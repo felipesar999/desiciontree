@@ -256,6 +256,8 @@ export default function Home() {
       dataOrden.push(data);
     }
 
+    console.log(dataOrden)
+
     for (let i = 0; i < dataErrorJob.length; i++) {
       var job = "";
       if (i === 0) job = "False";
